@@ -26,7 +26,6 @@ void saveResult(std::vector<Cluster>& result, const Graph& g, const int& feacute
 
 
 
-//检查无误  省空间版本
 std::tuple<int, std::unordered_map<int, std::pair<int,int>>,std::unordered_map<int, int>>
 calculateGain(const Graph& g, std::unordered_map<int, std::vector<int>>& node2neighborsPart, const int& npart);
 
