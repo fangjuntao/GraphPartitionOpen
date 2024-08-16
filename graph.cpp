@@ -2,51 +2,6 @@
 #include "graph.h"
 #include <dirent.h>
 #include <algorithm>
-/* 
-void Graph::add_node(int orig_node_id, const std::vector<double>& feat) 
-{
-    nodes[orig_node_id] = feat;
-    //  [orig_node_id] = feat;
-}
-
-void Graph::add_edge(int orig_node1, int orig_node2) {
-  //  int graph_node1 = orig_id_to_graph_id[orig_node1];
-    //int graph_node2 = orig_id_to_graph_id[orig_node2];
-    // edges[graph_node1].insert(graph_node2);
-    // edges[graph_node2].insert(graph_node1);
-    edges[orig_node1].push_back(orig_node2);
-    edges[orig_node2].push_back(orig_node1);
-
-}
-
-void Graph::add_node_process(int orig_node_id, const std::vector<double> &feat)
-{
-
-    // int graph_node_id = nodes.size();
-    // // printf("orig_node_id: %d",  orig_node_id);
-    // // printf("graph_node_id :%d\n", graph_node_id );
-
-    // // nodes[graph_node_id] = feat;
-    // // orig_id_to_graph_id[orig_node_id] = graph_node_id;
-    // // graph_id_to_orig_id[graph_node_id] = orig_node_id;
-    // // node_id_to_clusterID[graph_node_id]  =  0 ; //默认都处于同一层
-    // nodes[orig_node_id] = feat;
-}
-
-void Graph::add_edge_process(int orig_node1, int orig_node2)
-{
-
-      //  int graph_node1 = orig_id_to_graph_id[orig_node1];
-    //int graph_node2 = orig_id_to_graph_id[orig_node2];
-    // edges[graph_node1].insert(graph_node2);
-    // edges[graph_node2].insert(graph_node1);
-    // edges[orig_node1].insert(orig_node2);
-    // edges[orig_node2].insert(orig_node1);
-}
-
-
-
- */
 
 
 std::vector<std::string> split(const std::string& s, char delimiter) {
@@ -58,60 +13,6 @@ std::vector<std::string> split(const std::string& s, char delimiter) {
     }
     return tokens;
 }
-
-/*
-Graph read_graph(const std::string& data_input) 
-{
-    Graph g;
-    g.m = 0 ;
-    g.n = 0 ; 
-    std::vector<std::string> paths = split(data_input, ',');
-
-    std::string line;
-    // Read attribute features
-    std::ifstream attr_file(paths[1]);
-    while (std::getline(attr_file, line)) {
-        std::vector<std::string> tokens = split(line, ',');
-        int orig_node_id = std::stoi(tokens[0]);
-        std::vector<double> feat(tokens.size() - 1);
-        for (size_t i = 1; i < tokens.size(); ++i) {
-            feat[i - 1] = std::stof(tokens[i]);
-        }
-        g.add_node(orig_node_id, feat);
-        g.n++;
-    }
-
-
-
-    // Read edges
-    std::ifstream edge_file(paths[0]);
-    
-    while (std::getline(edge_file, line)) {
-        std::vector<std::string> tokens = split(line, ',');
-        int orig_node1 = std::stoi(tokens[0]);
-        int orig_node2 = std::stoi(tokens[1]);
-        g.add_edge(orig_node1, orig_node2);
-        g.m ++;
-    }
-
-
-    // Read attribute feature averages
-    std::ifstream avg_file(paths[2]);
-    std::getline(avg_file, line);
-    std::vector<std::string> tokens = split(line, ',');
-    g.feat_avg.resize(tokens.size());
-    for (size_t i = 0; i < tokens.size(); ++i) {
-        g.feat_avg[i] = std::stof(tokens[i]);
-    }
-
-    return g;
-}
-
-
-*/
-
-
-
 
 
 
@@ -143,7 +44,7 @@ void get_need_file(std::string path, std::vector<std::string>& input_files, std:
 
 }
 
-//下面是为本地服务  (数据格式未处理好)
+
 
 Graph read_graphProcressData(const std::string& data_input) 
 {
@@ -152,7 +53,7 @@ Graph read_graphProcressData(const std::string& data_input)
     g.n = 0 ; 
     std::unordered_map<int, int>&  name2id  =  g.orig_id_to_graph_id;
     std::unordered_map<int, int>& id2name  = g.graph_id_to_orig_id ;   
-    std::unordered_map<int, std::unordered_set<int>> graph;   //辅助读图
+    std::unordered_map<int, std::unordered_set<int>> graph;   
     std::vector<std::string> paths = split(data_input, ',');
 
     std::string line;
@@ -192,10 +93,7 @@ Graph read_graphProcressData(const std::string& data_input)
             graph[x].insert(y);
             graph[y].insert(x);
 
-            // g.add_edge(orig_node1, orig_node2);
-            // nodeSet.insert(orig_node1);
-            // nodeSet.insert(orig_node2);
-            // g.m ++;
+
         }
     }
     g.edges.resize(g.n);
@@ -209,7 +107,7 @@ Graph read_graphProcressData(const std::string& data_input)
 
     g.m /= 2 ;
 
-    // g.n   =   nodeSet.size(); 
+
 
 
     std::cout<<"read edges over!"<<std::endl;
@@ -240,8 +138,7 @@ Graph read_graphProcressData(const std::string& data_input)
                 feat[i - 1] = std::stof(tokens[i]);
             }
             g.nodes[ g.orig_id_to_graph_id[orig_node_id] ] = feat;
-            // g.add_node(orig_node_id, feat);
-            // g.n++;
+
         }
 
 
@@ -251,7 +148,7 @@ Graph read_graphProcressData(const std::string& data_input)
 
 
 
-    //计算avg_features
+
 
 
     if(g.nodes.size()<= 0)
@@ -260,8 +157,7 @@ Graph read_graphProcressData(const std::string& data_input)
     }
     else
     { 
-        // int s =  g.nodes[0].size();   
-       // std::cout<<"g.nodes[0].size(): "<<s<<std::endl;
+
         g.feat_sum.resize(g.nodes[0].size(),0.0);
         for (int i = 0 ; i < g.n ; i++)  
         {
@@ -272,10 +168,7 @@ Graph read_graphProcressData(const std::string& data_input)
             }
                 
         }
-        // for( int h =  0 ; h < g.feat_avg.size() ; ++h)
-        // {
-        //     g.feat_avg[h]  =   g.feat_avg[h] / g.n ;
-        // }
+
 
     }
 
@@ -286,7 +179,7 @@ Graph read_graphProcressData(const std::string& data_input)
 
 
 
-//尝试为kp服务
+
 Graph read_graph(const std::string &data_input)
 {
 
@@ -338,10 +231,7 @@ Graph read_graph(const std::string &data_input)
             graph[x].insert(y);
             graph[y].insert(x);
 
-            // g.add_edge(orig_node1, orig_node2);
-            // nodeSet.insert(orig_node1);
-            // nodeSet.insert(orig_node2);
-            // g.m ++;
+
         }
     }
     g.edges.resize(g.n);
@@ -397,7 +287,7 @@ Graph read_graph(const std::string &data_input)
 
 
 
-    //计算avg_features
+
 
 
     if(g.nodes.size()<= 0)
@@ -406,8 +296,7 @@ Graph read_graph(const std::string &data_input)
     }
     else
     { 
-        // int s =  g.nodes[0].size();   
-       // std::cout<<"g.nodes[0].size(): "<<s<<std::endl;
+
         g.feat_sum.resize(g.nodes[0].size(),0.0);
         for (int i = 0 ; i < g.n ; i++)  
         {
@@ -418,10 +307,7 @@ Graph read_graph(const std::string &data_input)
             }
                 
         }
-        // for( int h =  0 ; h < g.feat_avg.size() ; ++h)
-        // {
-        //     g.feat_avg[h]  =   g.feat_avg[h] / g.n ;
-        // }
+
 
     }
 
@@ -434,34 +320,3 @@ Graph read_graph(const std::string &data_input)
 
 
 }
-
-/**
- * 
- * 
-
- void normalize() {
-        if (nodes.empty()) return;
-
-        // 计算每个属性的最小值和最大值
-        std::vector<double> min_values(nodes.begin()->second.size(), std::numeric_limits<double>::max());
-        std::vector<double> max_values(nodes.begin()->second.size(), std::numeric_limits<double>::lowest());
-
-        for (const auto &node : nodes) {
-            for (size_t i = 0; i < node.second.size(); ++i) {
-                min_values[i] = std::min(min_values[i], node.second[i]);
-                max_values[i] = std::max(max_values[i], node.second[i]);
-            }
-        }
-
-        // 对每个属性进行归一化处理
-        for (auto &node : nodes) {
-            for (size_t i = 0; i < node.second.size(); ++i) {
-                node.second[i] = (node.second[i] - min_values[i]) / (max_values[i] - min_values[i]);
-            }
-        }
-    }
-
-
- * 
- * 
- */
