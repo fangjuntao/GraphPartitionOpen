@@ -5,12 +5,12 @@
 
 
 
-//O(m)  graph  edge   int -> 点数可以到20亿
+//O(m)  graph  edge  
 std::vector<double> computeObject(std::vector<Cluster>& clusters, std::vector<int>& nodeNumList, std:: vector<std::vector<double>>& featuresList, std::vector<int>& innerEdgeList ,  std::vector<int>& outerEdgeList, const Graph& g, double count_optimal, const std::vector<double>& vector_optimal,  const int & k )
 {
     
 
-    int  min_out = 0;  // partition 中的最少外边数
+    int  min_out = 0;  
     int min_count = 0;
     long long min_innerEdge = 0;
     long long max_innerEdge = 0  ;
@@ -71,7 +71,7 @@ std::vector<double> computeObject(std::vector<Cluster>& clusters, std::vector<in
         out_  +=   clusters[partID].outerEdgeNum;  
         Edge_ +=  clusters[partID].edgeSum;       
         nodeNumList.push_back(clusters[partID].count);
-        innerEdgeList.push_back( static_cast<int>(clusters[partID].innerEdgeNum));     // 这里需要确保 clusters[partID].innerEdgeNum 的值小于20 亿，类型转换才不会出错 
+        innerEdgeList.push_back( static_cast<int>(clusters[partID].innerEdgeNum));     
         outerEdgeList.push_back(clusters[partID].outerEdgeNum);
         std::vector<double> scaled_vector = clusters[partID].vector;
         int count = clusters[partID].count;
@@ -110,7 +110,7 @@ std::vector<double> computeObject(std::vector<Cluster>& clusters, std::vector<in
             max_abs_diff_divided_2[i] = std::max(max_abs_diff_divided_2[i], std::abs(vector[i] * count - vector_optimal[i]) / vector_optimal[i]);
         }
 
-        //max_abs_diff_divided_3 = std::max(max_abs_diff_divided_3, std::abs(static_cast<double>(innerEdgeNum) - innerdge_optimal) / innerdge_optimal);
+       
 
     }
     
@@ -124,21 +124,22 @@ std::vector<double> computeObject(std::vector<Cluster>& clusters, std::vector<in
     ans.push_back( min_max_ratio2 );
     ans.push_back((1.0* out_ )/ Edge_);
 
-    std::cout<<"溢出效应："<< (1.0* out_ )/ Edge_ << std::endl;
-    std::cout<<"溢出边的数量："<< out_<<std::endl;
-    std::cout<<"总边的数量："<< Edge_<<std::endl;   
-    std::cout<<"纯度："<< 1- (1.0* out_ )/ Edge_ << std::endl;   
-    std::cout<<"溢出边的比例："<< ( 1.0*min_out ) / max_out<< std::endl;   
 
-    std::cout<<"内边的比例：" << (1.0* min_innerEdge) / max_innerEdge << std::endl;   
-
-    //打印 ans
-    std::cout << "特征数量："<< g.feat_sum.size()<<std::endl;
     std::cout << "Imbalance values: ";
 
-    for (double value : ans) 
+
+    for(int i = 0 ;  i < ans.size() ; i++ )
     {
-        std::cout << value << " ";
+        if( i == g.feat_sum.size()+1 || i== g.feat_sum.size()+2)
+        {
+            std::cout << 1-ans[i] << " ";
+        }
+        else
+        {
+             std::cout << ans[i] << " ";
+
+        }
+
     }
     std::cout << std::endl;
 
@@ -148,7 +149,7 @@ std::vector<double> computeObject(std::vector<Cluster>& clusters, std::vector<in
 }
 
 
-//检查无误  可以优化为 O(m)
+
 std::tuple<int, std::vector<std::unordered_map<std::string, std::vector<std::pair<int, int>>>>, std::unordered_map<int, std::string>>
 calculateGain(const Graph& g, const std::vector<std::vector<int>>& cluster_node_list, std::unordered_map<int, std::vector<int>>& node2neighborsPart, int npart)
 {
@@ -164,7 +165,7 @@ calculateGain(const Graph& g, const std::vector<std::vector<int>>& cluster_node_
         for (const int& node : cluster_nodes)
         {
             std::vector<int> part_count(npart, 0);
-            const std::vector<int>& neighbors = g.edges[node];  // 取出node 的邻居
+            const std::vector<int>& neighbors = g.edges[node];  
             for (int neighbor : neighbors)
             {
                 int partID = g.node_id_to_partID.at(neighbor);
@@ -184,7 +185,7 @@ calculateGain(const Graph& g, const std::vector<std::vector<int>>& cluster_node_
                 ++count_candidate_node;
             }
             else{
-                nodeToKey[node] = "";  //gain 小于0 ,node 没有移动方向
+                nodeToKey[node] = "";  
             }
         }
         dict_list.push_back(move_dict);
@@ -218,25 +219,22 @@ void getIndex(const std::string& key, int& index_1, int& index_2)
 
 
 
-//检查无误  省空间版本
+
 std::tuple<int, std::unordered_map<int, std::pair<int,int>>,std::unordered_map<int, int>>
 calculateGain(const Graph& g, std::unordered_map<int, std::vector<int>>& node2neighborsPart, const int& npart)
 {
     // int swap_real_num = 0;
     // std::vector<std::unordered_map<std::string, std::vector<std::pair<int, int>>>> dict_list;
     int count_candidate_node = 0;
-    std::unordered_map<int, std::pair<int,int> > nodeToKey; //只存储gain > 0的点
-    std::unordered_map<int, int> nodeToGain; //只存储gain 大于0的点
+    std::unordered_map<int, std::pair<int,int> > nodeToKey; 
+    std::unordered_map<int, int> nodeToGain; 
     for (int i  = 0 ; i< g.n ; i++)
     {
 
-        //const std::vector<int>& cluster_nodes = cluster_node_list[i];
-        //std::unordered_map<std::string, std::vector<std::pair<int, int>>> move_dict;
-        // for (const int& node : cluster_nodes)
-        // {
+
         int node  = i ;
         std::vector<int> part_count(npart, 0);
-        const std::vector<int>& neighbors = g.edges[node];  // 取出node 的邻居
+        const std::vector<int>& neighbors = g.edges[node];  
         for (int neighbor : neighbors)
         {
             int partID = g.node_id_to_partID.at(neighbor);
@@ -251,18 +249,12 @@ calculateGain(const Graph& g, std::unordered_map<int, std::vector<int>>& node2ne
         int gain = max_value - selfPart_value;
         if (gain > 0)
         {
-            //std::string key_str = std::to_string(g.node_id_to_partID.at(node)) + "->" + std::to_string(max_index);
-            // move_dict[key_str].push_back(std::make_pair(node, gain));
+
             nodeToKey[node] = std::make_pair(g.node_id_to_partID.at(node), max_index );
             nodeToGain[node] = gain ;
             ++count_candidate_node;
         }
-        // else
-        // {
-        //     nodeToKey[node] = "";  //gain 小于0 ,node 没有移动方向
-        // }
-        // }
-        // dict_list.push_back(move_dict);
+
         part_count.clear();
         part_count.shrink_to_fit();
     }
@@ -281,7 +273,7 @@ FiveTuple IfSatisfiedContrainst(const Graph & g , const int& node, const int & i
     int index_1_partNum = node2neighborsPart.at(node)[index_1];
     int index_2_partNum = node2neighborsPart.at(node)[index_2];
 
-    //计算内边
+
     innerEdgeListTmp[index_1] -= index_1_partNum;
     innerEdgeListTmp[index_2] += index_2_partNum;
     double inerEdgeImbal = static_cast<double>(*std::min_element(innerEdgeListTmp.begin(), innerEdgeListTmp.end())) / *std::max_element(innerEdgeListTmp.begin(), innerEdgeListTmp.end());
@@ -292,7 +284,7 @@ FiveTuple IfSatisfiedContrainst(const Graph & g , const int& node, const int & i
         ans = false;
     }
 
-    //计算外边line 124line 124
+
     int index1_out_orig = 0;
     index1_out_orig += (g.edges.at(node).size() - index_1_partNum);
 
@@ -316,7 +308,7 @@ FiveTuple IfSatisfiedContrainst(const Graph & g , const int& node, const int & i
         ans = false;
     }
 
-    // 计算点数的变化
+
     nodeNumListTmp[index_1] -= 1;
     nodeNumListTmp[index_2] += 1;
     double nodeNumImbal = 0.0;
@@ -330,7 +322,7 @@ FiveTuple IfSatisfiedContrainst(const Graph & g , const int& node, const int & i
         ans = false;
     }
 
-    //计算特征的变化
+
     std::vector<double> feat = g.nodes.at(node);
 
     for (size_t i = 0; i < featuresListTmp[index_1].size(); ++i) {
@@ -368,7 +360,7 @@ FiveTuple IfSatisfiedContrainst(const Graph & g , const int& node, const int & i
 
 
 
-void saveResult(std::vector<Cluster>& result, const Graph& g, const int& feacuter_size, const int& k)   //存储result 信息
+void saveResult(std::vector<Cluster>& result, const Graph& g, const int& feacuter_size, const int& k)   
 {
 
     result.clear();
@@ -377,14 +369,10 @@ void saveResult(std::vector<Cluster>& result, const Graph& g, const int& feacute
         Cluster cluster(0,  std::vector<double>(feacuter_size, 0.0), 0, 0, 0);
         result.push_back(cluster);
     }
-    for (const auto& node_data : g.node_id_to_partID)   //这里之前是 g.nodes
+    for (const auto& node_data : g.node_id_to_partID)   
     {
         int node = node_data.first;
-        // if (g.nodes.find(node) == g.nodes.end()) 
-        // {
-        //        std::cout << "Key " << node<< " does not exist in the unordered_map g.nodes." << std::endl;
-        //        continue;
-        // } 
+
 
 
         const std::vector<double>& feat = g.nodes[node];
@@ -398,13 +386,7 @@ void saveResult(std::vector<Cluster>& result, const Graph& g, const int& feacute
         result[j].point[node] =  1 ;
         result[j].nodeSet.insert(node);
         int n_neighbors =  0;
-        // if(g.edges.find(node) != g.edges.end())
-        // {
-        //     n_neighbors = g.edges.at(node).size();
-        // }
-        // else{
-        //     g.edges[node]  =  std::unordered_set<int>();
-        // }
+
         n_neighbors = g.edges[node].size();
         result[j].edgeSum += n_neighbors;
     
@@ -414,25 +396,21 @@ void saveResult(std::vector<Cluster>& result, const Graph& g, const int& feacute
 
 
 
-//保存多个移动动作  node--gain --- pair   先小数据集测效果, 后面再优化上大数据集    unordered_map<int, unordered_map< int, pair<int,int>> >
+
 std::tuple<int, std::unordered_map<int, std::pair<int,int>>,std::unordered_map<int, int>>
 calculateGainMoreSearchSpace(const Graph& g, std::unordered_map<int, std::vector<int>>& node2neighborsPart, const int& npart)
 {
-    // int swap_real_num = 0;
-    // std::vector<std::unordered_map<std::string, std::vector<std::pair<int, int>>>> dict_list;
+
     int count_candidate_node = 0;
-    std::unordered_map<int, std::pair<int,int> > nodeToKey; //只存储gain > 0的点
-    std::unordered_map<int, int> nodeToGain; //只存储gain 大于0的点
+    std::unordered_map<int, std::pair<int,int> > nodeToKey; 
+    std::unordered_map<int, int> nodeToGain; 
     for (int i  =0 ; i< g.n ; i++)
     {
 
-        //const std::vector<int>& cluster_nodes = cluster_node_list[i];
-        //std::unordered_map<std::string, std::vector<std::pair<int, int>>> move_dict;
-        // for (const int& node : cluster_nodes)
-        // {
+
         int node  =  i ;
         std::vector<int> part_count(npart, 0);
-        const std::vector<int>& neighbors = g.edges[node];  // 取出node 的邻居
+        const std::vector<int>& neighbors = g.edges[node];  
         for (int neighbor : neighbors)
         {
             int partID = g.node_id_to_partID.at(neighbor);
@@ -447,18 +425,12 @@ calculateGainMoreSearchSpace(const Graph& g, std::unordered_map<int, std::vector
         int gain = max_value - selfPart_value;
         if (gain > 0)
         {
-            //std::string key_str = std::to_string(g.node_id_to_partID.at(node)) + "->" + std::to_string(max_index);
-            // move_dict[key_str].push_back(std::make_pair(node, gain));
+
             nodeToKey[node] = std::make_pair(g.node_id_to_partID.at(node), max_index );
             nodeToGain[node] = gain ;
             ++count_candidate_node;
         }
-        // else
-        // {
-        //     nodeToKey[node] = "";  //gain 小于0 ,node 没有移动方向
-        // }
-        // }
-        // dict_list.push_back(move_dict);
+
         part_count.clear();
         part_count.shrink_to_fit();
     }
@@ -475,7 +447,7 @@ calculateGainMoreSearchSpace(const Graph& g, std::unordered_map<int, std::vector
 
 
 
-void saveResultForIndicator(std::vector<Cluster>& result, Graph& g, const int& feacuter_size, const int& k)   //存储result 信息
+void saveResultForIndicator(std::vector<Cluster>& result, Graph& g, const int& feacuter_size, const int& k)  
 {
 
     result.clear();
@@ -484,14 +456,10 @@ void saveResultForIndicator(std::vector<Cluster>& result, Graph& g, const int& f
         Cluster cluster(0,  std::vector<double>(feacuter_size, 0.0), 0, 0, 0);
         result.push_back(cluster);
     }
-    for (const auto& node_data : g.node_id_to_partID)   //这里之前是 g.nodes
+    for (const auto& node_data : g.node_id_to_partID)   
     {
         int node = node_data.first;
-        // if (g.nodes.find(node) == g.nodes.end()) 
-        // {
-        //        std::cout << "Key " << node<< " does not exist in the unordered_map g.nodes." << std::endl;
-        //        continue;
-        // } 
+
 
 
         const std::vector<double>& feat = g.nodes[node];
@@ -505,13 +473,7 @@ void saveResultForIndicator(std::vector<Cluster>& result, Graph& g, const int& f
         result[j].point[node] =  1 ;
         result[j].nodeSet.insert(node);
         int n_neighbors =  0;
-        // if(g.edges[node] != g.edges.end())
-        // {
-        //     n_neighbors = g.edges.at(node).size();
-        // }
-        // else{
-        //     g.edges[node]  =  std::unordered_set<int>();
-        // }
+
         
         n_neighbors = g.edges[node].size();
         result[j].edgeSum += n_neighbors;
