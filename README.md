@@ -1,4 +1,4 @@
-g++ -o BIHM -std=c++17 -fopenmp -g graph.cpp cluster.cpp evaluation.cpp GainList.cpp BIHM.cpp -O3
+ g++ -o BIHM -std=c++17  -g graph.cpp cluster.cpp evaluation.cpp GainList.cpp BIHM.cpp -O3
 
 
 run example：
