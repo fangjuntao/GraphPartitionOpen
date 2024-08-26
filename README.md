@@ -11,6 +11,7 @@ This project consists of several C++ files:
 * evaluation.cpp:  Calculates various metrics for evaluating the graph partitioning results.
 * GainList.cpp: Implements the $GList$ data structure as described in the paper.
 * BIHM.cpp: Implements the BIHM algorithm.
+* kmeans: The open C++ library from https://ltla.github.io/CppKmeans/, which implements the k-means clustering algorithm.
 
 # Compile
 To compile the program, use the following command:
@@ -50,4 +51,4 @@ Here is an example of how to run the program:
 ```
 ./BIHM "./Facebook/data1,./Facebook/data2" 0.10 0.20 0.30 0.30 1 5 8 "results.txt"
 ```
-This command will execute the BIHM program using the specified input datasets (Facebook) and parameters to partition the Facebook Graph into 8 paritions, and the partitioning results will be saved in results.txt.
+This command will execute the BIHM program using the specified input datasets (Facebook) and parameters to partition the Facebook graph into 8 partitions, and the partitioning results will be saved in results.txt.
