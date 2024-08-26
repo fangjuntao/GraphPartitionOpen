@@ -32,18 +32,18 @@ To run the BIHM program, use the following command format:
 
 `<imbalance1>`: the balance parameters of vertex
 
-<imbalance2>: the balance parameters of attribute
+`<imbalance2>`: the balance parameters of attribute
 
-<imbalance3>: the balance parameters of edge
+`<imbalance3>`: the balance parameters of edge
 
-<imbalance4>: the balance parameters of cut
+`<imbalance4>`: the balance parameters of cut
 
-<feature_size>: number of user attributes
+`<feature_size>`: number of user attributes
 
-<k>: the $k$ of $k$-means
+`<k>`: the $k$ of $k$-means
 
-<p>: the number of partitions 
-<out_putfile>: the path to the output file where the graph partitioning results will be saved.
+`<p>`: the number of partitions 
+`<out_putfile>`: the path to the output file where the graph partitioning results will be saved.
 
 # Example Usage
 Here is an example of how to run the program:
