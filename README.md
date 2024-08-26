@@ -1,6 +1,5 @@
 # Experimental Environment
 The experiments are conducted on an Ubuntu Linux server (Release 22.04.3 LTS) equipped with:
-
 * CPU: Intel Xeon Silver 4210R (10 cores, 20 threads, @ 2.40GHz, 13.8MB L3 Cache)
 * Memory: 512GB
 # Summary of Program
