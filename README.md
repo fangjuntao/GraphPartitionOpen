@@ -30,7 +30,7 @@ To run the BIHM program, use the following command format:
 1. Path to the graph structure information (e.g., ./Facebook/data1).
 2. Path to the graph attribute information (e.g., ./Facebook/data2).
 
-<imbalance1>: the balance parameters of vertex
+`<imbalance1>`: the balance parameters of vertex
 
 <imbalance2>: the balance parameters of attribute
 
