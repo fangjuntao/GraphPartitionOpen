@@ -26,7 +26,7 @@ To run the BIHM program, use the following command format:
 ```
 
 ## Input Parameter
-<data_input>: The path to the input graph files. The graph dataset is divided into two parts:
+`<data_input>`: The path to the input graph files. The graph dataset is divided into two parts:
 1. Path to the graph structure information (e.g., ./Facebook/data1).
 2. Path to the graph attribute information (e.g., ./Facebook/data2).
 
